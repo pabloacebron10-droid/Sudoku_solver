@@ -81,44 +81,37 @@ def resolver_tablero(tablero, numero_maximo, tamano_cuadrado):
 
         fila += 1
 
-    for coordenada in coordenadas:
+    if not coordenadas:
+        return tablero
+    else:
 
-        fila_actual = tablero[coordenada[0]]
+        for coordenada in coordenadas:
 
-        candidatos = mascara - set(fila_actual)
+            fila_actual = tablero[coordenada[0]]
 
-        if len(candidatos) > 1:
+            candidatos = mascara - set(fila_actual)
 
-            columna_actual = obtener_columna_actual(
-                tablero,
-                coordenada
-            )
+            if len(candidatos) > 1:
 
-            candidatos -= set(columna_actual)
+                columna_actual = obtener_columna_actual(tablero,coordenada)
 
-        if len(candidatos) > 1:
+                candidatos -= set(columna_actual)
 
-            cuadrado_actual = obtener_cuadrado_actual(
-                tablero,
-                coordenada,
-                tamano_cuadrado
-            )
+            if len(candidatos) > 1:
 
-            candidatos -= set(cuadrado_actual)
+                cuadrado_actual = obtener_cuadrado_actual(tablero,coordenada,tamano_cuadrado)
 
-        if len(candidatos) == 1:
+                candidatos -= set(cuadrado_actual)
 
-            tablero[coordenada[0]][coordenada[1]] = candidatos.pop()
+            if len(candidatos) == 1:
 
-    return tablero
+                tablero[coordenada[0]][coordenada[1]] = candidatos.pop()
+
+        return resolver_tablero(tablero, numero_maximo, tamano_cuadrado)
 
 
 tablero, numero_maximo, tamano_cuadrado = leer_tablero("sudoku.txt")
 
-tablero = resolver_tablero(
-    tablero,
-    numero_maximo,
-    tamano_cuadrado
-)
+tablero = resolver_tablero(tablero,numero_maximo,tamano_cuadrado)
 
 print(tablero)
